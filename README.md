@@ -174,7 +174,7 @@ O Sistema de Gestão das Olimpíadas (SGO) é uma plataforma desenvolvida para c
 
 ### Diagrama de Componentes
 
-<img width="700px" src="./imagens/diagrama-de-componentes.png"/>
+<img width="700px" src="./imagens/Diagrama de Implantação.png"/>
 
 ---
 
