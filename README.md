@@ -205,13 +205,6 @@ sistema-gestao-olimpiadas/
 
 ---
 
-## 🛠️ Tecnologias Utilizadas
-
-- **Modelagem:** PlantUML
-- **Documentação:** Markdown
-
----
-
 ## 📌 Regras de Negócio
 
 1. **Cadastro de competições:** O sistema permite cadastrar competições com nome da modalidade, data, horário, local e lista de atletas inscritos.
