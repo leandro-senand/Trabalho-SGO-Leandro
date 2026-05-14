@@ -156,7 +156,7 @@ O Sistema de Gestão das Olimpíadas (SGO) é uma plataforma desenvolvida para c
 
 ### Diagrama de Caso de Uso
 
-<img width="700px" src="./imagens/diagrama-de-caso-de-uso.png"/>
+<img width="700px" src="./imagens/Diagrama de Caso de Uso.png"/>
 
 ---
 
