@@ -1,0 +1,87 @@
+@startuml diagrama-de-pacotes
+
+skinparam packageStyle rectangle
+skinparam packageFontStyle bold
+title Sistema de Gestão das Olimpíadas (SGO)\nDiagrama de Pacotes
+
+package "sgo" {
+
+    package "apresentacao" {
+        package "apresentacao.competicoes" {
+            [Competição Controller]
+            [Competição View]
+        }
+        package "apresentacao.atletas" {
+            [Atleta Controller]
+            [Atleta View]
+        }
+        package "apresentacao.resultados" {
+            [Resultado Controller]
+            [Resultado View]
+        }
+        package "apresentacao.relatorios" {
+            [Relatório Controller]
+            [Relatório View]
+        }
+    }
+
+    package "servicos" {
+        [CompeticaoService]
+        [AtletaService]
+        [InscricaoService]
+        [AlocacaoService]
+        [ResultadoService]
+        [RelatorioService]
+    }
+
+    package "dominio" {
+        package "dominio.modelo" {
+            [Competicao]
+            [Atleta]
+            [Local]
+            [Resultado]
+            [Pais]
+            [Inscricao]
+            [Medalha]
+            [AlocacaoLocal]
+        }
+        package "dominio.enums" {
+            [StatusCompeticao]
+            [StatusInscricao]
+            [TipoMedalha]
+        }
+    }
+
+    package "repositorios" {
+        [CompeticaoRepository]
+        [AtletaRepository]
+        [LocalRepository]
+        [ResultadoRepository]
+        [PaisRepository]
+        [InscricaoRepository]
+        [MedalhaRepository]
+    }
+
+    package "infraestrutura" {
+        package "infraestrutura.persistencia" {
+            [DataSource]
+            [DatabaseConfig]
+        }
+        package "infraestrutura.seguranca" {
+            [AuthService]
+            [JwtProvider]
+        }
+        package "infraestrutura.config" {
+            [AppConfig]
+        }
+    }
+
+}
+
+"apresentacao" ..> "servicos" : usa
+"servicos" ..> "dominio" : usa
+"servicos" ..> "repositorios" : usa
+"repositorios" ..> "infraestrutura.persistencia" : usa
+"infraestrutura.seguranca" ..> "servicos" : autentica
+
+@enduml
