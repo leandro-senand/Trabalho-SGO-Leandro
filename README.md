@@ -162,7 +162,7 @@ O Sistema de Gestão das Olimpíadas (SGO) é uma plataforma desenvolvida para c
 
 ### Diagrama de Classes
 
-<img width="700px" src="./imagens/diagrama-de-classes.png"/>
+<img width="700px" src="./imagens/Diagrama de Classes.png
 
 ---
 
