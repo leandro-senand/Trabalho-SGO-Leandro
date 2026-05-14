@@ -1,0 +1,84 @@
+@startuml diagrama-de-implantacao
+
+skinparam nodeStyle rectangle
+title Sistema de Gestão das Olimpíadas (SGO)\nDiagrama de Implantação
+
+node "Dispositivo do Usuário" as UserDevice {
+    node "Navegador Web" as Browser {
+        artifact "Aplicação Web (React)" as WebApp
+    }
+    node "Smartphone" as Phone {
+        artifact "App Mobile (React Native)" as MobileApp
+    }
+}
+
+node "Infraestrutura Cloud (AWS/GCP)" as Cloud {
+
+    node "CDN / Load Balancer" as LB {
+        artifact "Nginx / CloudFront" as CDN
+    }
+
+    node "Servidor de Aplicação 1" as AppServer1 {
+        artifact "API REST (Spring Boot)" as API1
+    }
+
+    node "Servidor de Aplicação 2\n(Redundância)" as AppServer2 {
+        artifact "API REST (Spring Boot)" as API2
+    }
+
+    node "Servidor de Autenticação" as AuthServer {
+        artifact "Auth Service (JWT/OAuth2)" as AuthSvc
+    }
+
+    node "Servidor de Cache" as CacheServer {
+        artifact "Redis Cache" as Redis
+    }
+
+    node "Cluster de Banco de Dados" as DBCluster {
+        node "BD Primário" as DBPrimary {
+            database "PostgreSQL (Primary)" as PGPrimary
+        }
+        node "BD Réplica" as DBReplica {
+            database "PostgreSQL (Replica)" as PGReplica
+        }
+    }
+
+    node "Servidor de Relatórios" as ReportServer {
+        artifact "Serviço de Relatórios" as ReportSvc
+        artifact "Gerador PDF/Excel" as ExportSvc
+    }
+
+    node "Servidor de Armazenamento" as StorageServer {
+        artifact "Object Storage (S3)" as S3
+    }
+
+    node "Servidor de Mensageria" as MsgServer {
+        artifact "RabbitMQ / SQS" as Queue
+        artifact "Serviço de E-mail (SES)" as EmailSvc
+    }
+}
+
+Browser --> LB : HTTPS (443)
+Phone --> LB : HTTPS (443)
+
+LB --> AppServer1 : HTTP (8080)
+LB --> AppServer2 : HTTP (8080)
+
+AppServer1 --> AuthServer : HTTP interno
+AppServer2 --> AuthServer : HTTP interno
+
+AppServer1 --> CacheServer : TCP (6379)
+AppServer2 --> CacheServer : TCP (6379)
+
+AppServer1 --> DBPrimary : JDBC (5432)
+AppServer2 --> DBPrimary : JDBC (5432)
+DBPrimary --> DBReplica : replicação
+
+AppServer1 --> ReportServer : HTTP interno
+ReportServer --> S3 : HTTPS
+ReportServer --> DBReplica : JDBC (leitura)
+
+AppServer1 --> Queue : AMQP
+Queue --> EmailSvc : enfileirado
+
+@enduml
