@@ -162,13 +162,13 @@ O Sistema de Gestão das Olimpíadas (SGO) é uma plataforma desenvolvida para c
 
 ### Diagrama de Classes
 
-<img width="700px" src="./imagens/Diagrama de Classes.png
+<img width="700px" src="./imagens/Diagrama de Classes.png/>
 
 ---
 
 ### Diagrama de Pacotes
 
-<img width="700px" src="./imagens/diagrama-de-pacotes.png"/>
+<img width="700px" src="./imagens/Diagrama de Componentes.png"/>
 
 ---
 
@@ -183,25 +183,6 @@ O Sistema de Gestão das Olimpíadas (SGO) é uma plataforma desenvolvida para c
 <img width="700px" src="./imagens/diagrama-de-implantacao.png"/>
 
 ---
-
-## 📁 Estrutura do Repositório
-
-```
-sistema-gestao-olimpiadas/
-├── README.md
-├── imagens/
-│   ├── diagrama-de-caso-de-uso.png
-│   ├── diagrama-de-classes.png
-│   ├── diagrama-de-pacotes.png
-│   ├── diagrama-de-componentes.png
-│   └── diagrama-de-implantacao.png
-└── codigos/
-    ├── diagrama-de-caso-de-uso.puml
-    ├── diagrama-de-classes.puml
-    ├── diagrama-de-pacotes.puml
-    ├── diagrama-de-componentes.puml
-    └── diagrama-de-implantacao.puml
-```
 
 ---
 
