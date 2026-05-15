@@ -184,6 +184,10 @@ O Sistema de Gestão das Olimpíadas (SGO) é uma plataforma desenvolvida para c
 
 ---
 
+### Diagrama de Sequência
+
+<img width="700px" src="./imagens/Diagrama de Sequência.png"/>
+
 ---
 
 ## 📌 Regras de Negócio
