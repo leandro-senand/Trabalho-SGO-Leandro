@@ -1,0 +1,83 @@
+@startuml diagrama-de-sequencia
+
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 10
+skinparam sequenceParticipant underline
+
+title Sistema de Gestão das Olimpíadas (SGO)\nDiagrama de Sequência — Inscrição de Atleta em Competição
+
+actor "Atleta" as A
+participant "Interface Web" as UI
+participant "InscricaoController" as IC
+participant "InscricaoService" as IS
+participant "AtletaService" as AS
+participant "CompeticaoService" as CS
+participant "AlocacaoService" as AL
+participant "InscricaoRepository" as IR
+participant "EmailService" as ES
+database "SGO_DB" as DB
+
+A -> UI : Acessa lista de competições
+UI -> CS : listarCompeticoes()
+CS -> DB : SELECT competicoes WHERE status = 'AGENDADA'
+DB --> CS : lista de competições
+CS --> UI : competições disponíveis
+UI --> A : exibe competições
+
+A -> UI : Seleciona competição e clica em "Inscrever"
+UI -> IC : POST /inscricoes {atletaId, competicaoId, paisId}
+
+IC -> IS : inscrever(atletaId, competicaoId, paisId)
+
+IS -> AS : buscarAtleta(atletaId)
+AS -> DB : SELECT atleta WHERE id = atletaId
+DB --> AS : dados do atleta
+AS --> IS : Atleta
+
+IS -> CS : buscarCompeticao(competicaoId)
+CS -> DB : SELECT competicao WHERE id = competicaoId
+DB --> CS : dados da competição
+CS --> IS : Competicao
+
+IS -> IS : validarStatusCompeticao(competicao)
+alt competição não está AGENDADA
+    IS --> IC : throws CompeticaoNaoDisponivelException
+    IC --> UI : 400 Bad Request "Competição não disponível"
+    UI --> A : exibe mensagem de erro
+end
+
+IS -> IR : buscarInscricaoExistente(atletaId, modalidade)
+IR -> DB : SELECT inscricao WHERE atleta_id = ? AND modalidade = ?
+DB --> IR : resultado
+IR --> IS : inscricao existente (ou null)
+
+alt atleta já representa outro país na modalidade
+    IS --> IC : throws PaisConflitanteException
+    IC --> UI : 409 Conflict "Atleta já representa outro país nesta modalidade"
+    UI --> A : exibe mensagem de erro
+end
+
+IS -> AL : verificarVagasCompeticao(competicaoId)
+AL -> DB : SELECT COUNT inscritos WHERE competicao_id = ?
+DB --> AL : total de inscritos
+AL --> IS : vagas disponíveis
+
+alt competição sem vagas
+    IS --> IC : throws SemVagasException
+    IC --> UI : 409 Conflict "Competição sem vagas disponíveis"
+    UI --> A : exibe mensagem de erro
+end
+
+IS -> IR : salvar(novaInscricao)
+IR -> DB : INSERT INTO inscricoes (atleta_id, competicao_id, pais_id, status, data_inscricao)
+DB --> IR : inscricao salva
+IR --> IS : Inscricao (com id gerado)
+
+IS -> ES : enviarConfirmacao(atleta.email, competicao)
+ES --> IS : e-mail enfileirado
+
+IS --> IC : Inscricao confirmada
+IC --> UI : 201 Created {inscricaoId, status: "ATIVA"}
+UI --> A : exibe confirmação de inscrição
+
+@enduml
